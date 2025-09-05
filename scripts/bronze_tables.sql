@@ -1,0 +1,60 @@
+--This script creates all tables for the bronze layers
+
+DROP TABLE IF EXISTS bronze.crm_cust_info;
+CREATE TABLE bronze.crm_cust_info (
+    cust_id INT,
+    cust_key VARCHAR(50),
+    cust_firstname VARCHAR(50),
+    cust_lastname VARCHAR(50),
+    cust_marital_status VARCHAR(50),
+    cust_gndr VARCHAR(50),
+    cust_create_date DATE 
+);
+
+DROP TABLE IF EXISTS bronze.crm_prd_info;
+CREATE TABLE bronze.crm_prd_info (
+    prd_id INT,
+    prd_key VARCHAR(50),
+    prd_nm VARCHAR(50),
+    prd_cost FLOAT,
+    prd_line VARCHAR(50),
+    prd_start_date DATE,
+    prd_end_date DATE
+);
+
+DROP TABLE IF EXISTS bronze.crm_sales_details;
+CREATE TABLE bronze.crm_sales_details (
+    sls_ord_num VARCHAR(50),
+    sls_prd_key VARCHAR(50),
+    sls_cust_id INT,
+    sls_order_dt INT,
+    sls_ship_dt INT,
+    sls_due_dt INT,
+    sls_sales FLOAT,
+    sls_quantity INT,
+    sls_price FLOAT
+);
+
+DROP TABLE IF EXISTS bronze.erp_px_cat_giv2;
+CREATE TABLE bronze.erp_px_cat_giv2(
+    id VARCHAR(50),
+    cat VARCHAR(50),
+    subcat VARCHAR(50),
+    maintenace VARCHAR(50)
+);
+
+
+DROP TABLE IF EXISTS bronze.erp_cust_az12;
+CREATE TABLE bronze.erp_cust_az12(
+    cid VARCHAR(50),
+    bdate VARCHAR(50),
+    gen VARCHAR(50)
+);
+
+
+DROP TABLE IF EXISTS bronze.erp_cust_az12;
+CREATE TABLE bronze.erp_cust_az12(
+    cid VARCHAR(50),
+    cntry VARCHAR(50)
+);
+
