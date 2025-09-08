@@ -108,3 +108,62 @@ FROM
 
 SELECT * from bronze.crm_prd_info
 SELECT * from bronze.erp_px_cat_g1v2
+
+
+--sales_details
+--1. Checking for invalide dates: 
+    --DATE MUST NOT BE 0
+    --LENGTH MUST BE 8
+    --SHIP DATE MUST NOT BE EARLIER THAN ORDER DATE
+    --check for outliers 
+    --order date must be earlier than shipping date
+SELECT
+    sls_order_dt,
+    sls_ship_dt,
+    sls_due_dt
+FROM bronze.crm_sales_details
+WHERE sls_ship_dt = 0  OR sls_due_dt = 0 OR sls_due_dt = 0
+
+
+--SALES, QUANTITY AND PRICE
+
+SELECT  
+    sls_sales, 
+    sls_price, 
+    sls_quantity,
+
+FROM bronze.crm_sales_details
+
+
+--UPDATING DATA QUALITY
+SELECT
+     sls_ord_num,
+    sls_prd_key,
+    sls_cust_id,
+    CASE 
+        WHEN sls_order_dt = 0 OR LENGTH(sls_order_dt:: TEXT) <> 8 THEN NULL
+        ELSE CAST(sls_order_dt AS TEXT):: DATE
+    END AS sls_order_dt,
+    
+    CASE WHEN sls_ship_dt = 0 OR LENGTH(sls_ship_dt:: TEXT) <> 8 
+        THEN NULL
+    ELSE CAST(sls_ship_dt AS TEXT):: DATE
+    END AS sls_ship_dt,
+    
+    CASE WHEN sls_due_dt = 0 OR LENGTH(sls_due_dt:: TEXT) <> 8 THEN NULL
+    ELSE CAST(sls_due_dt AS TEXT):: DATE
+    END AS sls_due_dt,
+        CASE 
+        WHEN sls_sales <= 0 OR sls_sales IS NULL OR sls_sales <> sls_quantity *sls_price THEN sls_quantity * ABS(sls_price)
+        ELSE sls_sales
+    END AS sls_sales,
+
+    CASE WHEN sls_price = 0 OR sls_price IS NULL THEN sls_sales / NULLIF(sls_quantity, 0)
+    WHEN sls_price < 0 THEN ABS(sls_price)
+        ELSE sls_price
+    END AS sls_price,
+
+    CASE WHEN sls_quantity <= 0 OR sls_quantity IS NULL THEN sls_sales / NULLIF(sls_price, 0)
+        ELSE sls_quantity
+    END AS sls_quantity
+FROM bronze.crm_sales_details
