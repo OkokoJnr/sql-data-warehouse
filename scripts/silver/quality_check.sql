@@ -130,8 +130,7 @@ WHERE sls_ship_dt = 0  OR sls_due_dt = 0 OR sls_due_dt = 0
 SELECT  
     sls_sales, 
     sls_price, 
-    sls_quantity,
-
+    sls_quantity
 FROM bronze.crm_sales_details
 
 
@@ -167,3 +166,37 @@ SELECT
         ELSE sls_quantity
     END AS sls_quantity
 FROM bronze.crm_sales_details
+
+
+--cust_az12
+--CHECK FOR BDATE IN THE FUTURE
+--CHECK FOR IMPOSSIBLE VERY OLD CUSTOMERS
+--format gender into Male and Female options only
+
+SELECT 
+    gen,
+    CASE 
+        WHEN UPPER(TRIM(gen)) IN ('M', 'MALE') THEN 'Male'
+        WHEN UPPER(TRIM(gen)) IN ('F', 'FEMALE') THEN 'Female'
+    ELSE 'Uknown'
+    END AS gen
+FROM bronze.erp_cust_az12
+
+SELECT 
+    gen
+FROM bronze.crm_cust_info
+
+--update quality check
+SELECT
+    CASE WHEN UPPER(cid) LIKE 'NASA%' THEN SUBSTRING(cid, 4, LENGTH(cid))
+    ELSE cid
+    END cid,
+    CASE WHEN bdate::DATE > NOW() THEN NULL
+    ELSE bdate
+    END bdate,
+        CASE 
+        WHEN UPPER(TRIM(gen)) IN ('M', 'MALE') THEN 'Male'
+        WHEN UPPER(TRIM(gen)) IN ('F', 'FEMALE') THEN 'Female'
+    ELSE 'Uknown'
+    END AS gen 
+FROM bronze.erp_cust_az12
