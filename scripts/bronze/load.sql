@@ -10,7 +10,7 @@ DECLARE
 
     
 BEGIN
-start_time := 'clock_timestamp()';
+start_time := clock_timestamp();
 RAISE NOTICE 'Executing the bronze layer';
 RAISE NOTICE 'Loading data into: crm_cust_info';
     TRUNCATE TABLE bronze.crm_cust_info;
