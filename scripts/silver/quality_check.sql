@@ -8,7 +8,7 @@ SCRIPTS PURPOSE:
         * Data consistency between related fields
 USAGE NOTES: 
     - Run these checks after data loading silver layer
-    - Investigate and resolve any discrepancies found during checks
+    - Investigate and resolve any discrepancies found during
 */
 --crm_cust_info
 --CHECKING FOR DUPLICATES AND NULL
