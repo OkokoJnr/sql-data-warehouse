@@ -1,4 +1,16 @@
-                    --crm_cust_info
+--QUALITY CHECKS 
+/*
+SCRIPTS PURPOSE:
+    This scripts performs various quality cecks for data consistency, accuracy, and standardization across the silver schema. It includes cecks for:
+        * Null or duplicates primary keys
+        * Unwanted spaces in string fields
+        * Invalid date ranges and orders
+        * Data consistency between related fields
+USAGE NOTES: 
+    - Run these checks after data loading silver layer
+    - Investigate and resolve any discrepancies found during checks
+*/
+--crm_cust_info
 --CHECKING FOR DUPLICATES AND NULL
 SELECT 
     cust_id,
